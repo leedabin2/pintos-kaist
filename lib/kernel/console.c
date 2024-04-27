@@ -122,7 +122,7 @@ vprintf (const char *format, va_list args) {
 	__vprintf (format, args, vprintf_helper, &char_cnt);
 	release_console ();
 
-	return char_cnt;
+	return char_cnt; // 출력된 문자의 개수
 }
 
 /* Writes string S to the console, followed by a new-line

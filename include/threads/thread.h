@@ -12,18 +12,19 @@
 
 /* States in a thread's life cycle. */
 enum thread_status {
-	THREAD_RUNNING,     /* Running thread. */
+	THREAD_RUNNING,     /* Running thread. */ 
 	THREAD_READY,       /* Not running but ready to run. */
 	THREAD_BLOCKED,     /* Waiting for an event to trigger. */
-	THREAD_DYING        /* About to be destroyed. */
+	THREAD_DYING        /* About to be destroyed. */	
 };
 
 /* Thread identifier type.
    You can redefine this to whatever type you like. */
-typedef int tid_t;
+typedef int tid_t; // 스레드 식별자
 #define TID_ERROR ((tid_t) -1)          /* Error value for tid_t. */
 
 /* Thread priorities. */
+// 핀토스는 쓰레드의 우선순위를 64범위로 설정
 #define PRI_MIN 0                       /* Lowest priority. */
 #define PRI_DEFAULT 31                  /* Default priority. */
 #define PRI_MAX 63                      /* Highest priority. */
@@ -51,8 +52,8 @@ typedef int tid_t;
  *           |                                 |
  *           |                                 |
  *           +---------------------------------+
- *           |              magic              |
- *           |            intr_frame           |
+ *           |              magic              |  쓰레드 스택 오버플로우를 탐지하기 위한 마법 번호
+ *           |            intr_frame           |  
  *           |                :                |
  *           |                :                |
  *           |               name              |
@@ -94,6 +95,7 @@ struct thread {
 
 	/* Shared between thread.c and synch.c. */
 	struct list_elem elem;              /* List element. */
+	int64_t wake_up_ticks; // 일어나야할 틱수 저장
 
 #ifdef USERPROG
 	/* Owned by userprog/process.c. */
@@ -108,6 +110,7 @@ struct thread {
 	struct intr_frame tf;               /* Information for switching */
 	unsigned magic;                     /* Detects stack overflow. */
 };
+
 
 /* If false (default), use round-robin scheduler.
    If true, use multi-level feedback queue scheduler.
